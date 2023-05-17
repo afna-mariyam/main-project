@@ -1,0 +1,31 @@
+#detdiv{
+    
+    margin-right: auto;
+    margin-left: auto;
+   display: grid;
+}
+.inputField{
+    margin-left:20px ;
+}
+#mdiv{
+   float: left;
+   width: 50%;
+    border-right: 2px solid #55c2da;
+    margin: 20px;
+    padding: 20px;
+}
+#idiv{
+    margin: 20px;
+    padding:20px;
+}
+.lbl{
+    margin-left: 8px;
+}
+#submitbtn{
+    border: 0px;
+    border-radius: 8px;
+    margin-left: 8px;
+    background-color:#55c2da;
+    padding:4px;
+    width: 20%;
+}
