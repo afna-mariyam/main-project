@@ -2,20 +2,29 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
+const sharp = require('sharp');
+const fs = require('fs');
 const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 cloudinary.config({
     cloud_name: 'dfilispou',
     api_key: '154533932989919',
     api_secret: '9ZQ1vw7nNrcLMcWOLxdjS_UoLzI'
   });
-  
+  const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: 'knownfaces', // Specify the folder where you want to store the images
+    allowedFormats: ['jpg', 'jpeg', 'png'] // Specify the allowed image formats
+  });
 
 require('../db/conn');
 const User = require("../model/userSchema");
 const Investigator = require("../model/investigatorSchema");
 const Comp = require("../model/complaintSchema");
 const Invregi = require("../model/invregSchema");
+const upload = multer({ storage: storage });
 
 router.get('/', (req, res) => {
     res.send('hello home page router');
@@ -59,8 +68,8 @@ router.get('/', (req, res) => {
 //     }
 //   });
 
-router.post('/submit', async (req,res)=>{
-    console.log(req.body)
+// router.post('/submit', async (req,res)=>{
+//     console.log(req.file.path)
     // const image=req.file
     // const { name,phone_no,image } = req.body;
     // try {
@@ -93,11 +102,38 @@ router.post('/submit', async (req,res)=>{
     //     console.log(err);
     // }
 
+// });
+
+router.post('/submit',upload.single('image'),async (req, res) => {
+    // Get the path of the uploaded file
+
+    //const image=req.file;
+    // Process the image using sharp
+    const name = req.body.name;
+    const phone_no = req.body.phone_no;
+    const image_url = req.file.path;
+    console.log(image_url);
+    if(!name || !phone_no || !image_url) {
+        return res.status(422).json({error:"please fill the required"});
+    }
+
+    try{
+     
+    const userExist = await User.findOne({name:name});
+    if(userExist){
+        return res.status(422).json({ error: "Name already Exist"});
+    }
+
+    const user = new User({name,phone_no,image_url});
+
+    await user.save();    
+
+    res.status(201).json({message:"user registered successfully"});
+
+    } catch(err){
+        console.log(err);
+    }
 });
-
-
-
-
 
 
 router.post('/invreg', async (req,res)=>{
