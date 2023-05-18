@@ -2,6 +2,14 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+    cloud_name: 'dfilispou',
+    api_key: '154533932989919',
+    api_secret: '9ZQ1vw7nNrcLMcWOLxdjS_UoLzI'
+  });
+  
 
 require('../db/conn');
 const User = require("../model/userSchema");
@@ -38,33 +46,58 @@ router.get('/', (req, res) => {
 // })
 
 // Async-Await
+// Handle image upload
+// router.post('/upload', async (req, res) => {
+//     try {
+//       const result = await cloudinary.uploader.upload(req.body.image);
+//       // Store the image URL in MongoDB
+//       const image_url = new Image({ url: result.secure_url });
+      
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ message: 'Server error' });
+//     }
+//   });
 
 router.post('/submit', async (req,res)=>{
+    console.log(req.body)
+    // const image=req.file
+    // const { name,phone_no,image } = req.body;
+    // try {
+    //     const result = await cloudinary.uploader.upload(image);
+    //     // Store the image URL in MongoDB
+    //      image_url = new Image({ url: result.secure_url });
+    //     console.log(image_url);
+    //   } catch (err) {
+    //     console.error(err);
+    //     res.status(500).json({ message: 'Server error' });
+    //   }
+    // if(!name || !phone_no || !image_url) {
+    //     return res.status(422).json({error:"please fill the required"});
+    // }
 
-    const { name,phone_no } = req.body;
-
-    if(!name || !phone_no ) {
-        return res.status(422).json({error:"please fill the required"});
-    }
-
-    try{
+    // try{
      
-    const userExist = await User.findOne({name:name});
-    if(userExist){
-        return res.status(422).json({ error: "Name already Exist"});
-    }
+    // const userExist = await User.findOne({name:name});
+    // if(userExist){
+    //     return res.status(422).json({ error: "Name already Exist"});
+    // }
 
-    const user = new User({name,phone_no});
+    // const user = new User({name,phone_no,image_url});
 
-    await user.save();    
+    // await user.save();    
 
-    res.status(201).json({message:"user registered successfully"});
+    // res.status(201).json({message:"user registered successfully"});
 
-    } catch(err){
-        console.log(err);
-    }
+    // } catch(err){
+    //     console.log(err);
+    // }
 
 });
+
+
+
+
 
 
 router.post('/invreg', async (req,res)=>{

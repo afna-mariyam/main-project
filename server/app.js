@@ -2,12 +2,13 @@ const dotenv = require("dotenv");
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
+const bodyParser= require('body-parser');
 
 
 dotenv.config({path:'./config.env'});
 require('./db/conn');
 // const User = require('./model/userSchema');
-
+app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.json());
 
 app.use(require('./router/auth'));

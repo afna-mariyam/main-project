@@ -8,6 +8,9 @@ const userSchema = new mongoose.Schema({
     phone_no:{
         type:Number,
         required:true
+    },
+    image_url:{
+        type:String,
     }
 })
 
