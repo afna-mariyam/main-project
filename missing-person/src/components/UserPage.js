@@ -82,9 +82,11 @@ const UserPage = () => {
     })
       .then((response) => {
         console.log(response);
+        window.alert(" registration successful");
       })
       .catch((error) => {
         console.error(error);
+        window.alert("invalid registration");
       });
     // const data = await res.json();
     // if(res.status === 422 || !data ){

@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 // import '../App.css';
-import MultipleImageUploadComponent from './multiple-image-upload.js'
+// import MultipleImageUploadComponent from './multiple-image-upload.js'
 const ComplaintScreen = () => {
   const [images,setImages]=useState({});
-  function updateImageData(imageData){
-    setImages({...images,['images']:imageData});
-  }
+//   function updateImageData(imageData){
+//     setImages({...images,['images']:imageData});
+//   }
     const navigate = useNavigate();
     const [comp,setComp] = useState({
       cid:"",mname:"",mstate:"",maddress:"",mdate:"",mlslocation:"",iname:"",iaddress:"",mdescription:"",mphone_no:"" 
@@ -23,33 +23,62 @@ const handleInputs = (e) => {
     // console.log(name,value);
     setComp({...comp, [name]:value});
 }
+const handleImageChanges = (e) => {
+    setImages(e.target.files[0]);
+  };
+
 // function handleInputs(e){
 //     setUser({...user,[e.target.name]:e.target.value});
 //    }
-const PostData = async (e) => {
+const PostDatas = async (e) => {
     e.preventDefault();
-    const { cid,mname,mstate,maddress,mdate,mlslocation,iname,iaddress,mdescription,mphone_no } = comp;
-    const res = await fetch("/complaint", {
-        method:"POST",
-        headers:{
-            "Content-Type" : "application/json"
-        },
-        body: JSON.stringify({
-            
-          cid,mname,mstate,maddress,mdate,mlslocation,iname,iaddress,mdescription,mphone_no
-            
-        })
-    });
-    const data = await res.json();
-    if(res.status === 422 || !data ){
-        window.alert("invalid registration");
-        console.log("invalid registration");
-    } else {
+    const formData = new FormData();
+    formData.append("images", images);
+    formData.append("cid", comp.cid);
+    formData.append("mname", comp.mname);
+    formData.append("mstate", comp.mstate);
+    formData.append("maddress", comp.maddress);
+    formData.append("mdate", comp.mdate);
+    formData.append("mlslocation", comp.mlslocation);
+    formData.append("iname", comp.iname);
+    formData.append("iaddress", comp.iaddress);
+    formData.append("mdescription", comp.mdescription);
+    formData.append("mphone_no", comp.mphone_no);
+    fetch("/complaint", {
+      method: "POST",
+      body: formData,
+    })
+   
+      .then((response) => {
+        console.log(response);
         window.alert(" registration successful");
-        console.log(" registration successful");
+      })
+      .catch((error) => {
+        console.error(error);
+        window.alert("invalid registration");
+      });
+    // const { cid,mname,mstate,maddress,mdate,mlslocation,iname,iaddress,mdescription,mphone_no } = comp;
+    // const res = await fetch("/complaint", {
+    //     method:"POST",
+    //     headers:{
+    //         "Content-Type" : "application/json"
+    //     },
+    //     body: JSON.stringify({
+            
+    //       cid,mname,mstate,maddress,mdate,mlslocation,iname,iaddress,mdescription,mphone_no
+            
+    //     })
+    // });
+    // const data = await res.json();
+    // if(res.status === 422 || !data ){
+    //     window.alert("invalid registration");
+    //     console.log("invalid registration");
+    // } else {
+    //     window.alert(" registration successful");
+    //     console.log(" registration successful");
 
-        navigate("/investigatorpage");
-    }
+    //     navigate("/investigatorpage");
+    // }
 }
 
      return (
@@ -61,7 +90,9 @@ const PostData = async (e) => {
                 
                     <div method="POST" className="col-md-4">
                     <h2 style={{textAlign:"center",marginBottom:"14px"}}>Missing Person's Details</h2>
-      <MultipleImageUploadComponent handleToUpdate={updateImageData}/> 
+      {/* <MultipleImageUploadComponent handleToUpdate={updateImageData}/>  */}
+      <label className="form-label">Upload photo</label>
+            <input type="file" onChange={handleImageChanges} />
       <br/>
                         <label  className="form-label">Complaint ID</label>
                         <input type="text" className="form-control"name="cid" id="cid" autoComplete='off'
@@ -128,7 +159,7 @@ const PostData = async (e) => {
                         <input type="text" className="form-control" name="mphone_no" id="mphone_no"  autoComplete='off'
                          value={comp.mphone_no}
                          onChange={handleInputs}></input>
-                        <button type="submit" className="user-btn" onClick={PostData}>Register</button>
+                        <button type="submit" className="user-btn" onClick={PostDatas}>Register</button>
 
                     </div>
                 </center>

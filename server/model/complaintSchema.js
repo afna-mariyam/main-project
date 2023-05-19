@@ -1,6 +1,9 @@
 const mongoose=require('mongoose');
 
 const complaintSchema = new mongoose.Schema({
+    cimage_url:{
+        type:String,
+    },
     cid:{
         type:String,
         required:true
