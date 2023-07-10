@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 
 const LoginPage = () =>{ 
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const [name, setUsername] = useState('');
   const [password, setPassword] = useState('');
   
 
@@ -22,14 +22,14 @@ const LoginPage = () =>{
 const loginInv = async (e) => {
   e.preventDefault();
   
-  const res = await fetch('/invreg', {
+  const res = await fetch('/api1/invreg', {
     method : "POST",
     credentials:"include",
     headers:{
       "Content-Type" : "application/json"
     },
     body:JSON.stringify({
-      username,password
+      name,password
     })
   
 
@@ -59,7 +59,7 @@ if(res.status === 400 || !data){
            <div method = "POST">
             <span>
              <img src={email} alt="email" className="email" style={{minWidth:"60px",minHeight:"40px"}} />
-             <input type="text" placeholder="user name" className="name" autoComplete="off" name="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
+             <input type="text" placeholder="user name" className="name" autoComplete="off" name="name" value={name} onChange={(e) => setUsername(e.target.value)}/>
              </span>
            </div>
            <div className="second-input">

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import '../App.css';
+// import '../App.css';
 const InvReg = () => {
     const navigate = useNavigate();
     const [inv,setInv] = useState({
@@ -24,7 +24,7 @@ const handleInputs = (e) => {
 const PostData = async (e) => {
     e.preventDefault();
     const { name, password } = inv;
-    const res = await fetch("/invreg", {
+    const res = await fetch("/api1/stationreg", {
         method:"POST",
         headers:{
             "Content-Type" : "application/json"
@@ -49,12 +49,13 @@ const PostData = async (e) => {
 
      return (
         
-        <div className='container'>
+        // <div className='container'>
         <div className='invreg'>
            
                 <center>
                 
                     <div method="POST" className="col-md-4">
+                        <h1>Register Police Station</h1>
                         <label  className="form-label">Police Station</label>
                         <input type="text" className="form-control"name="name" id="name" autoComplete='off'
                         value={inv.name}
@@ -62,7 +63,7 @@ const PostData = async (e) => {
                         placeholder="Ernakulam-North"></input>
                         <br></br>
                         <label  className="form-label">Password</label>
-                        <input type="text" className="form-control" name="password" id="password"  autoComplete='off'
+                        <input type="password" className="form-control" name="password" id="password"  autoComplete='off'
                          value={inv.password}
                          onChange={handleInputs}
                          ></input>
@@ -74,7 +75,7 @@ const PostData = async (e) => {
                 </center>
                 
         </div>  
-        </div> 
+        // </div> 
         
         
     );

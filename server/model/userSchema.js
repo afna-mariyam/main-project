@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
     },
     image_url:{
         type:String,
+    },
+    loc:{
+        type:String,
+        required:true
     }
 })
 

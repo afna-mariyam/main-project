@@ -1,61 +1,49 @@
-import React from 'react';
+import React,{ useEffect, useState } from 'react';
+import MaterialTable from 'material-table';
+// import {useNavigate} from 'react-router-dom';
+import axios from 'axios'
+// import {Link} from '@material-ui/core'
 
-const MsgBox = () => {
-    return (
-        
+const MessageBox = () => {
+  const [data,setComp]=useState([])
+  const columns=[
+    {title:"case id",field:"cmpid"},
+    {title:'missing name',field:'miname'},
+    {title:'investigator name',field:'inname'},
+    {title:'missing photo',field:'mphoto',render: rowData => ( <a href={rowData.mphoto}>view photo</a>)},
+    {title:'user name',field:'person'},
+    {title:'user number',field:'uphone'},
+    {title:'user location',field:'uloc',render: rowData => ( <a href={rowData.uloc}>view location</a>)},
+    {title:'suspected photo',field:'sphoto',render: rowData => ( <a href={rowData.sphoto}>view photo</a>)},
+    ]
+    
+    const viewmessages = async(e) =>{
+      e.preventDefault();
+      try{
+        const response = await axios.get('/api1/fetchmessage');
+        setComp(response.data);
+          }
+      catch(error){
+          console.log("inside catch not fetched");
+          console.log(error);
+      }
+      
+  }
   
 
-        <div>
-            <center>
-                <h style= {{Color:"indigo",fontSize:25}} >MESSAGE BOX</h></center><br></br>
-            <br></br>
-            <table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Missing Person</th>
-      <th scope="col">User</th>
-      <th scope="col">User-No</th>
-      <th scope="col">User-location</th>
-      <th scope="col">Investigator</th>
-      <th scope="col">Image</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Sita</td>
-      <td>James</td>
-      <td>9856421555</td>
-      <td>Ernakulam</td>
-      <td>Hari</td>
-      <td><a href="#" class="link-primary">View</a></td>
-      
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Alice</td>
-      <td>8541278565</td>
-      <td>Kottayam</td>
-      <td>Ram</td>
-      <td><a href="#" class="link-primary">View</a></td>
-      
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>Bob</td>
-      <td>9965478521</td>
-      <td>Thrissur</td>
-      <td>Mohammed</td>
-      <td><a href="#" class="link-primary">View</a></td>
-      
-    </tr>
-  </tbody>
-</table>
-        </div>
-        
-        );
+    return (
+      <div>
+      <button className=" mt-2 bg-indigo-800 hover:bg-indigo-500 text-white font-semibold hover:text-white py-2 px-10  border border-blue-500 hover:border-transparent rounded" onClick = { viewmessages }>
+     View List
+   </button>
+     <h1 align='center'> Message Box </h1>
+     <MaterialTable title="Messages" 
+     data={data}
+     columns={columns} 
+     options={{paging:false , delete:true }}/>
+ </div>
+
+
+ );
     }
-    export default MsgBox;
+    export default MessageBox;

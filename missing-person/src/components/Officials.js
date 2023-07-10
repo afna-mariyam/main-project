@@ -22,7 +22,7 @@ const Officials = () =>{
 const loginInv = async (e) => {
   e.preventDefault();
   
-  const res = await fetch('/login', {
+  const res = await fetch('/api1/login', {
     method : "POST",
     credentials:"include",
     headers:{

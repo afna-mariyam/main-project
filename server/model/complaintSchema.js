@@ -21,7 +21,7 @@ const complaintSchema = new mongoose.Schema({
         required:true
     },
     mdate:{
-        type:Date,
+        type:String,
         required:true
     },
     mlslocation:{

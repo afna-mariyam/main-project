@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 const mongoose=require('mongoose');
-// const bcrypt = require('bcryptjs');
-
 const investigatorSchema = new mongoose.Schema({
     username:{
         type:String,
@@ -20,18 +18,6 @@ const investigatorSchema = new mongoose.Schema({
         }
     ]
 })
-
-
-// investigatorSchema.pre('save',async function(next){
-//     if(this.isModified('password')){
-//         this.password=bcrypt.hash(this.password,12);
-
-//     }
-//     next();
-// })
- 
-
-//token generate
 
 investigatorSchema.methods.generateAuthToken = async function(){
     try{

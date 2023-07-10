@@ -1,13 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 // import '../App.css';
 // import MultipleImageUploadComponent from './multiple-image-upload.js'
 const ComplaintScreen = () => {
-  const [images,setImages]=useState({});
+  
+  const [cimage_url,setImages]=useState({});
 //   function updateImageData(imageData){
 //     setImages({...images,['images']:imageData});
 //   }
     const navigate = useNavigate();
+    const [data,setComps]=useState([]);
+    const [img,setImg]=useState([]);
+    // const [cmpid,setCmpid]=useState([]);
+    // const [cname,setCname]=useState([]);
     const [comp,setComp] = useState({
       cid:"",mname:"",mstate:"",maddress:"",mdate:"",mlslocation:"",iname:"",iaddress:"",mdescription:"",mphone_no:"" 
     });
@@ -33,7 +39,7 @@ const handleImageChanges = (e) => {
 const PostDatas = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("images", images);
+    formData.append("cimage_url", cimage_url);
     formData.append("cid", comp.cid);
     formData.append("mname", comp.mname);
     formData.append("mstate", comp.mstate);
@@ -44,50 +50,45 @@ const PostDatas = async (e) => {
     formData.append("iaddress", comp.iaddress);
     formData.append("mdescription", comp.mdescription);
     formData.append("mphone_no", comp.mphone_no);
-    fetch("/complaint", {
+    
+    await fetch("/api1/complaint", {
       method: "POST",
       body: formData,
     })
-   
-      .then((response) => {
-        console.log(response);
-        window.alert(" registration successful");
+    .then((response) => response.text()).then(data=>{
+      console.log(data);
+      axios.post('/api2', { cimage_url:data })
+  
+      .then(response => {
+        console.log(response.data); 
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
-        window.alert("invalid registration");
       });
-    // const { cid,mname,mstate,maddress,mdate,mlslocation,iname,iaddress,mdescription,mphone_no } = comp;
-    // const res = await fetch("/complaint", {
-    //     method:"POST",
-    //     headers:{
-    //         "Content-Type" : "application/json"
-    //     },
-    //     body: JSON.stringify({
-            
-    //       cid,mname,mstate,maddress,mdate,mlslocation,iname,iaddress,mdescription,mphone_no
-            
-    //     })
-    // });
-    // const data = await res.json();
-    // if(res.status === 422 || !data ){
-    //     window.alert("invalid registration");
-    //     console.log("invalid registration");
-    // } else {
-    //     window.alert(" registration successful");
-    //     console.log(" registration successful");
-
-    //     navigate("/investigatorpage");
-    // }
+      // const cata = res.json();
+    
+      window.alert(" registration successful");
+      navigate('/investigatorpage')
+    })
+    .catch((error) => {
+      console.error(error);
+      window.alert("invalid registration");
+    });      
 }
 
+
+
+// window.onload=Fetchcimageurls()
+// useEffect(() => {
+//   Fetchcimageurls()
+//   },[])
      return (
         
        
         <div className='complaintscreen'>
            
                 <center>
-                
+
                     <div method="POST" className="col-md-4">
                     <h2 style={{textAlign:"center",marginBottom:"14px"}}>Missing Person's Details</h2>
       {/* <MultipleImageUploadComponent handleToUpdate={updateImageData}/>  */}
@@ -160,7 +161,7 @@ const PostDatas = async (e) => {
                          value={comp.mphone_no}
                          onChange={handleInputs}></input>
                         <button type="submit" className="user-btn" onClick={PostDatas}>Register</button>
-
+                        {/* <button type="submit" className="user-btn" onClick={man}>Register111</button> */}
                     </div>
                 </center>
                 
